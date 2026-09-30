@@ -1,0 +1,4 @@
+# Used by hand: python -m dociq.evaluate --kind qwen --model <model> --prompt <prompt> --split validation --name qwen_<prompt>
+model: Qwen/Qwen2.5-VL-3B-Instruct
+prompt: v1                  # v1 = guide prompt, v2 = with one example, v3 = stricter; pick the best on VALIDATION
+max_new_tokens: 768

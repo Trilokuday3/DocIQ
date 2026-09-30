@@ -1,0 +1,11 @@
+explain/
+__pycache__/
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+mlruns/
+.env
+*.pt
+*.safetensors
+mlflow.db

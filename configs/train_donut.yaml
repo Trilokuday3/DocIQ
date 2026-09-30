@@ -1,0 +1,17 @@
+run_name: donut-960x720-lr3e-5
+base: naver-clova-ix/donut-base
+img_size: [960, 720]        # height, width; try [1280, 960] as an ablation
+max_len: 768
+lr: 3.0e-5                  # sweep 1e-5, 5e-5
+epochs: 30                  # early stopping on validation TED accuracy
+batch_size: 2
+grad_accum: 4               # effective batch 8
+warmup_steps: 300
+fp16: true                  # set fp16: false, bf16: true on A10G or newer
+num_beams: 1                # 3 for the beam-search ablation
+train_fraction: 1.0         # 0.25 / 0.5 / 1.0 for the learning curve
+val_n: 30                   # validation receipts scored each epoch (final eval uses all 100)
+patience: 4                 # evals without improvement before stopping
+seed: 42
+output_dir: outputs/donut
+hub_model_id: null          # e.g. your-hf-username/dociq-donut-cord (needs HF_TOKEN)

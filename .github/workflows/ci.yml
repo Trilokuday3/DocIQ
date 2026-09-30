@@ -1,0 +1,25 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -e .[dev] fastapi python-multipart prometheus-client
+      - run: ruff check .
+      - run: pytest -q
+  # Runs only once you set repo variable MODEL_ID (Settings > Variables) and secret HF_TOKEN.
+  eval-gate:
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ vars.MODEL_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -e .[infer,data] --extra-index-url https://download.pytorch.org/whl/cpu
+      # Threshold: a few points under your real validation F1 so noise doesn't break builds.
+      - run: python -m dociq.evaluate --model $MODEL_ID --split test --n 10 --min-f1 ${{ vars.MIN_F1 || '0.75' }}
+        env: { MODEL_ID: "${{ vars.MODEL_ID }}", HF_TOKEN: "${{ secrets.HF_TOKEN }}" }

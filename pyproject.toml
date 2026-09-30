@@ -1,0 +1,32 @@
+[project]
+name = "dociq"
+version = "0.1.0"
+description = "Receipt image to validated JSON with a fine-tuned Donut"
+requires-python = ">=3.10"
+# Light, pure-Python deps only: tokenize, schema, metrics, augment run anywhere.
+dependencies = ["pydantic>=2", "zss", "pillow", "pyyaml"]
+
+[project.optional-dependencies]
+data = ["datasets"]
+infer = ["torch", "torchvision", "transformers", "sentencepiece", "accelerate"]
+train = ["dociq[infer,data]", "mlflow"]
+serve = ["fastapi", "uvicorn[standard]", "python-multipart", "prometheus-client", "gradio"]
+nb = ["matplotlib", "pandas", "jupyter"]
+dev = ["pytest", "ruff", "httpx"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+markers = ["slow: downloads data or models; run with -m slow"]
+addopts = "-m 'not slow'"
+
+[tool.ruff]
+line-length = 110
+extend-exclude = ["*.ipynb"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["E501"]
