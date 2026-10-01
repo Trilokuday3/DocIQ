@@ -14,4 +14,4 @@ val_n: 30                   # validation receipts scored each epoch (final eval 
 patience: 4                 # evals without improvement before stopping
 seed: 42
 output_dir: outputs/donut
-hub_model_id: null          # e.g. your-hf-username/dociq-donut-cord (needs HF_TOKEN)
+hub_model_id: Trilokuday3/dociq-donut-cord   # needs HF_TOKEN; set to null to skip the Hub push
